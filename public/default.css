@@ -1,0 +1,129 @@
+/* Reset styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Global styles */
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: #444;
+  background-color: #f7f7f7;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+main {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  max-width: 800px;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+input {
+  font-size: 18px;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f2f2f2;
+  margin-bottom: 10px;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
+
+button {
+  font-size: 18px;
+  padding: 10px 20px;
+  background-color: #008cff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #0070cc;
+}
+
+#output {
+  text-align: center;
+  margin-top: 30px;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  margin: 0 10px;
+  /* add margin on both sides */
+}
+
+.logo img {
+  height: 40px;
+}
+
+footer p {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 10px;
+  /* add margin on both sides */
+  color: #555;
+}

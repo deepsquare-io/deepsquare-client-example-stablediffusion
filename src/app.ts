@@ -38,6 +38,15 @@ const unpadJobId = (num: string) => {
 
 const router = express.Router();
 
+//router.use('/styles.css', express.static('public/styles.css', { type: 'text/css' } as any));[]
+
+router.use(express.static('public'))
+
+
+router.get('/', (req: Request, res: Response) => {
+  res.render('index');
+});
+
 router.get('/get', async (req: Request, res: Response) => {
   const job_id = padJobId(req.query.job_id as string);
   const methods = deepSquareClient.getLogsMethods(job_id);
@@ -78,7 +87,7 @@ router.get('/draw', async (req: Request, res: Response) => {
     "SEED": Math.round(Math.random() * 100000),
     "PROMPT": `"${prompt}"`,
     "STEPS": 250,
-    "SIZE": 768,
+    "SIZE": 512,
   }
 
   const myJob = createJob(
@@ -105,8 +114,6 @@ const app = express();
 app.use(cors());
 
 app.use(ROOT_PATH, router);
-
-
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');

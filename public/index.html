@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Art App</title>
+  <link rel="stylesheet" type="text/css" href="default.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1>Art App</h1>
+  </header>
+  <main>
+    <div class="container">
+      <form>
+        <div class="input-group">
+          <label for="prompt">Prompt:</label>
+          <input type="text" id="prompt" name="prompt">
+        </div>
+        <button id="generate-btn">Generate Art</button>
+      </form>
+      <canvas id="countdown-canvas" style="display:none"></canvas>
+      <div id="output"></div>
+    </div>
+  </main>
+  <footer>
+    <div class="footer-content">
+      <p>Powered by</p>
+    </div>
+    <div class="footer-content">
+      <div class="logo">
+        <img src="https://upload.wikimedia.org/wikipedia/en/0/03/Avalanche_logo_without_text.png" alt="Avalanche logo">
+      </div>
+      <div class="logo">
+        <img src="https://deepsquare.io/wp-content/uploads/2022/04/logo-dark.png" alt="Deepsquare logo">
+      </div>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+
+</html>
