@@ -51,8 +51,6 @@ form.addEventListener('submit', async (event) => {
   const prompt = document.getElementById('prompt').value;
   const button = document.getElementById('generate-btn');
   button.disabled = true;
-  button.style.backgroundColor = "#EEE4";
-  button.style.borderColor = "#EEE4";
   canvas.style.display = "block"; // or "inline" depending on the element's default display value
 
   // Set up the interval to update the countdown

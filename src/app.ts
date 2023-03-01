@@ -87,7 +87,7 @@ router.get('/draw', async (req: Request, res: Response) => {
     "SEED": Math.round(Math.random() * 100000),
     "PROMPT": `"${prompt}"`,
     "STEPS": 250,
-    "SIZE": 512,
+    "SIZE": 768,
   }
 
   const myJob = createJob(

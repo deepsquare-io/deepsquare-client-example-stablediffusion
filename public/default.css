@@ -77,6 +77,7 @@ input:focus {
 }
 
 button {
+  width: 100%;
   font-size: 18px;
   padding: 10px 20px;
   background-color: #008cff;
