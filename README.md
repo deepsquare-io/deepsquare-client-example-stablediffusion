@@ -4,16 +4,19 @@ The DeepSquare Art Generator is a web application that allows users to generate 
 The application takes user inputs such as prompt text, seed value, number of steps, and image size, and uses them as input for the Stable Difussion generative model to generate a new image. 
 The application then displays the generated image to the user.
 
-
+![image](https://user-images.githubusercontent.com/745864/222168772-468744f6-3e35-4dd9-a4a0-26cbeb7f1932.png)
 
 ## Installation 
 
 
 ```
 pnpm i
-pnpm run dev
 ```
 
+## Usage 
+
+- Start the experss server : `pnpm run dev`
+- Then headout to http://localhost:3000 and enjoy
 
 ## Description 
 
