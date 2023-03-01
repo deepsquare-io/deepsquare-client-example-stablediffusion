@@ -1,4 +1,12 @@
-# Installation 
+# DeepSquare Art Generator
+
+The DeepSquare Art Generator is a web application that allows users to generate unique, high-quality images using a deep learning model. 
+The application takes user inputs such as prompt text, seed value, number of steps, and image size, and uses them as input for the Stable Difussion generative model to generate a new image. 
+The application then displays the generated image to the user.
+
+
+
+## Installation 
 
 
 ```
@@ -7,7 +15,7 @@ pnpm run dev
 ```
 
 
-# Description 
+## Description 
 
 The code initializes an Express app with a single router that has two routes `/get` and `/draw`.
 
@@ -21,7 +29,7 @@ The prompt parameter is used to create a DeepSquare job with specific parameters
 The `job` is then submitted to the DeepSquare server using the DeepSquareClient API. 
 The `num` property in the response is the job ID of the submitted job, and the seed property is a random seed used in the job parameters.
 
-# Configuration
+## Configuration
 
 The environment variables used in this code are:
 
@@ -47,7 +55,7 @@ Note that the values of these variables are specific to the user's configuration
 Default values can be found in .env.example
 
 
-# Job management 
+## Job management 
 
 This is a TypeScript code that exports a function `createJob` that creates a job configuration object. The job configuration is passed to the job execution system of DeepSquare, that runs the job using the specified resources and environment variables.
 
