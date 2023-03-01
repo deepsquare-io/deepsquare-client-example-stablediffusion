@@ -65,6 +65,8 @@ The `createJob` function takes four parameters:
 - `SEED`: a number that represents the seed value for the random number generator used in the deep learning model.
 - `STEPS`: a number that represents the number of steps to generate an image using the deep learning model.
 - `SIZE`: a number that represents the size of the image to be generated using the deep learning model.
+
+
 The job configuration object has several fields:
 
 - enableLogging: a boolean that specifies whether to enable logging.
