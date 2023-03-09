@@ -1,9 +1,14 @@
 import express, { Request, Response } from 'express';
+import { Server } from 'http';
+
 import DeepSquareClient from "@deepsquare/deepsquare-client";
 import { BigNumber } from "@ethersproject/bignumber";
 import dotenv from 'dotenv'
 import cors from 'cors';
 import { createJob } from './job'
+import { Server as SocketIOServer, Socket } from 'socket.io';
+
+
 dotenv.config()
 
 const deepSquareClient = new DeepSquareClient(
@@ -13,6 +18,10 @@ const deepSquareClient = new DeepSquareClient(
   process.env.ENDPOINT as string);
 
 const ROOT_PATH = process.env.ROOT_PATH as string | "/";
+
+const app = express();
+const server = new Server(app);
+const io = new SocketIOServer(server);
 
 const padJobId = (num: string) => {
   const length = 64; // length of the fixed length hex string
@@ -38,8 +47,6 @@ const unpadJobId = (num: string) => {
 
 const router = express.Router();
 
-//router.use('/styles.css', express.static('public/styles.css', { type: 'text/css' } as any));[]
-
 router.use(express.static('public'))
 
 
@@ -47,30 +54,67 @@ router.get('/', (req: Request, res: Response) => {
   res.render('index');
 });
 
-router.get('/get', async (req: Request, res: Response) => {
-  const job_id = padJobId(req.query.job_id as string);
+io.on('connection', async (socket) => {
+  console.log('Client connected');
+
+  const job_id = padJobId(socket.handshake.query.job_id as string);
   const methods = deepSquareClient.getLogsMethods(job_id);
-  const logStream = await methods.fetchLogs();
   const decoder = new TextDecoder();
   let take_next = false;
+
   const fetchLogstream = async () => {
-    for await (const log of logStream) {
-      const lineStr = decoder.decode(log.data);
-      if (take_next) {
-        take_next = false;
-        return lineStr;
+    try {
+      const logStream = await methods.fetchLogs();
+
+      for await (const log of logStream) {
+        const lineStr = decoder.decode(log.data);
+        //console.log(lineStr)
+        const percentageMatch = lineStr.match(/\d+\.?\d*\s*%/);
+        const percentage = percentageMatch ? percentageMatch[0] : null;
+        if (percentage) {
+          socket.emit('percentage', percentage);
+        }
+        else {
+          socket.emit('data', lineStr);
+        }
+        if (take_next) {
+          console.log("there is an image what")
+          socket.emit('image_url', `${lineStr?.replace('transfer.deepsquare.run/', 'transfer.deepsquare.run/get/')}`);
+          take_next = false;
+          socket.emit('end');
+          return;
+        }
+        if (lineStr.includes("Click on this link to preview your results:")) {
+          take_next = true;
+        }
       }
-      if (lineStr.includes("Click on this link to preview your results:")) {
-        take_next = true;
+
+      // If we reach this point, the log stream has ended, so we emit the `end` event to the client
+      socket.emit('end');
+    } catch (err) {
+      console.log("error")
+      //console.error(err);
+
+      // If the error is due to a broken iterator contract, we wait for a few seconds and try again
+      if (err.message === 'iterator contract broken') {
+        console.log('Retrying in 5 seconds...');
+        setTimeout(fetchLogstream, 5000);
+      }
+
+      // If the error is due to cancellation by the client, we do not retry and emit the `error` event to the client
+      else if (err.code === 'CANCELLED') {
+        socket.emit('error', { message: err.message, code: err.code });
       }
     }
   }
 
-  const image_url = await fetchLogstream().catch(console.error) as string;
-  console.log(image_url)
+  await fetchLogstream().catch(console.error);
   methods.stopFetch();
+});
+
+router.get('/get', async (req: Request, res: Response) => {
   res.json({
-    image_url: `${image_url?.replace('transfer.deepsquare.run/', 'transfer.deepsquare.run/get/')}`
+    status: "job_launched"
   });
 });
 
@@ -86,7 +130,7 @@ router.get('/draw', async (req: Request, res: Response) => {
   const parameters = {
     "SEED": Math.round(Math.random() * 100000),
     "PROMPT": `"${prompt}"`,
-    "STEPS": 250,
+    "STEPS": 200,
     "SIZE": 768,
   }
 
@@ -102,19 +146,20 @@ router.get('/draw', async (req: Request, res: Response) => {
     num: `(${unpadJobId(job)})`,
     seed: `${parameters["SEED"]}`
   });
-
-  // PROMPT : ${parameters["PROMPT"]}<br />
-  // SEED : ${parameters["SEED"]}<br />
-  // SIZE : ${parameters["SIZE"]}x${parameters["SIZE"]}<br />
 });
 
-
-const app = express();
 // Allow requests from any origin
 app.use(cors());
 
 app.use(ROOT_PATH, router);
 
-app.listen(3000, () => {
+io.on('connection', (socket: Socket) => {
+  console.log('A user connected');
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
+});
+
+server.listen(3000, () => {
   console.log('Server started on port 3000');
 });
