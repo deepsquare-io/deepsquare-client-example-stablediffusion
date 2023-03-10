@@ -58,15 +58,15 @@ io.on('connection', async (socket) => {
   console.log('Client connected');
 
   const job_id = padJobId(socket.handshake.query.job_id as string);
-  const methods = deepSquareClient.getLogsMethods(job_id);
+  const logsMethods = deepSquareClient.getLogsMethods(job_id);
+  const [read, stopFetch] = await logsMethods.fetchLogs();
   const decoder = new TextDecoder();
   let take_next = false;
 
   const fetchLogstream = async () => {
     try {
-      const logStream = await methods.fetchLogs();
 
-      for await (const log of logStream) {
+      for await (const log of read) {
         const lineStr = decoder.decode(log.data);
         //console.log(lineStr)
         const percentageMatch = lineStr.match(/\d+\.?\d*\s*%/);
@@ -109,7 +109,7 @@ io.on('connection', async (socket) => {
   }
 
   await fetchLogstream().catch(console.error);
-  methods.stopFetch();
+  stopFetch();
 });
 
 router.get('/get', async (req: Request, res: Response) => {
